@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="Calendar.Calendar" android:versionCode="1" android:versionName="1.0">
+  <!--suppress UsesMinSdkAttributes-->
+  <uses-sdk android:minSdkVersion="16" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <application android:theme="@android:style/Theme.Black.NoTitleBar" android:name="mono.android.app.Application" android:allowBackup="true" android:label="Calendar.Calendar" android:debuggable="true">
+    <activity android:label="Dag" android:name="md53af59c1425f5b9d80123cecbe195877e.DagActivity" />
+    <activity android:icon="@drawable/calendar2" android:label="Agenda" android:name="md53af59c1425f5b9d80123cecbe195877e.MainActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <activity android:label="Maand" android:name="md53af59c1425f5b9d80123cecbe195877e.MonthActivity" />
+    <activity android:label="Week" android:name="md53af59c1425f5b9d80123cecbe195877e.WeekActivity" />
+    <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="2147483647" android:authorities="Calendar.Calendar.mono.MonoRuntimeProvider.__mono_init__" />
+    <!--suppress ExportedReceiver-->
+    <receiver android:name="mono.android.Seppuku">
+      <intent-filter>
+        <action android:name="mono.android.intent.action.SEPPUKU" />
+        <category android:name="mono.android.intent.category.SEPPUKU.Calendar.Calendar" />
+      </intent-filter>
+    </receiver>
+  </application>
+</manifest>

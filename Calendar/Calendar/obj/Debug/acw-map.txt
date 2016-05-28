@@ -1,0 +1,16 @@
+Calendar.DagActivity, Calendar;md53af59c1425f5b9d80123cecbe195877e.DagActivity
+Calendar.DagActivity, Calendar, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md53af59c1425f5b9d80123cecbe195877e.DagActivity
+Calendar.DagActivity;md53af59c1425f5b9d80123cecbe195877e.DagActivity
+calendar.DagActivity;md53af59c1425f5b9d80123cecbe195877e.DagActivity
+Calendar.MainActivity, Calendar;md53af59c1425f5b9d80123cecbe195877e.MainActivity
+Calendar.MainActivity, Calendar, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md53af59c1425f5b9d80123cecbe195877e.MainActivity
+Calendar.MainActivity;md53af59c1425f5b9d80123cecbe195877e.MainActivity
+calendar.MainActivity;md53af59c1425f5b9d80123cecbe195877e.MainActivity
+Calendar.MonthActivity, Calendar;md53af59c1425f5b9d80123cecbe195877e.MonthActivity
+Calendar.MonthActivity, Calendar, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md53af59c1425f5b9d80123cecbe195877e.MonthActivity
+Calendar.MonthActivity;md53af59c1425f5b9d80123cecbe195877e.MonthActivity
+calendar.MonthActivity;md53af59c1425f5b9d80123cecbe195877e.MonthActivity
+Calendar.WeekActivity, Calendar;md53af59c1425f5b9d80123cecbe195877e.WeekActivity
+Calendar.WeekActivity, Calendar, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md53af59c1425f5b9d80123cecbe195877e.WeekActivity
+Calendar.WeekActivity;md53af59c1425f5b9d80123cecbe195877e.WeekActivity
+calendar.WeekActivity;md53af59c1425f5b9d80123cecbe195877e.WeekActivity

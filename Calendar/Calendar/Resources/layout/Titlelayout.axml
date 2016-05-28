@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/CustomTitleStyle"
+    android:weightSum="3">
+    <ImageView
+        android:gravity="left"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:id="@+id/titelImageView"
+        android:src="@drawable/calendar2"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_weight="1" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"
+        android:text="Agenda"
+        android:textColor="#ffffff"
+        android:id="@+id/textViewTitel"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1" />
+    <Button
+        android:text="+"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/buttonAddTaskLayout"
+        android:textSize="30sp"
+        android:id="@+id/buttonTitelTask"
+        android:textColor="#ffffff"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true" />
+    <Button
+        android:text="T"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/buttonAddTaskLayout"
+        android:textSize="30sp"
+        android:textColor="#ffffff"
+        android:id="@+id/buttonToday"
+        android:layout_toLeftOf="@+id/buttonTitelTask" />
+</RelativeLayout>

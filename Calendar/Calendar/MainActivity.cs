@@ -8,37 +8,43 @@ using Android.OS;
 
 namespace Calendar
 {
-    [Activity(Label = "Calendar", MainLauncher = true, Icon = "@drawable/icon")]
-    public class MainActivity : Activity
-    {
-        int count = 1;
-        Calendar.CalendarFunctions calendar = new Calendar.CalendarFunctions();
 
+    [Activity(Label = "Agenda", MainLauncher = true, Icon = "@drawable/calendar2")]
+    public class MainActivity : TabActivity
+    {
+        DataHolder dataholder = new DataHolder();
+        DateTime datum;
+        
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
-
-            // Get our button from the layout resource,
-            // and attach an event to it
-            CalendarView calendar = FindViewById<CalendarView>(Resource.Id.calendarView1);
             
-            calendar.DateChange += CalendarOnDateChange;
-            //    button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+            // Create an Intent to launch an Activity for the tab (to be reused)  
+            //var intent = new Intent(this, typeof(MyActivityGroup));
+            var intent = new Intent(this, typeof(MonthActivity));
+            intent.AddFlags(ActivityFlags.ClearTop);
+            var spec = TabHost.NewTabSpec("Maand");
+            spec.SetIndicator("Maand", null);
+            spec.SetContent(intent);
+            TabHost.AddTab(spec);
+            
+            intent = new Intent(this, typeof(DagActivity));
+       
+            intent.AddFlags(ActivityFlags.ClearTop);
+            spec = TabHost.NewTabSpec("Dag");
+            spec.SetIndicator("Dag", null);
+            spec.SetContent(intent);
+            TabHost.AddTab(spec);
+            TabHost.CurrentTab = 0;
         }
-
-        private void CalendarOnDateChange(object sender, CalendarView.DateChangeEventArgs args)
-        {
-            DateTime datum = new DateTime(args.Year, args.Month, args.DayOfMonth);
-            string[] taken =  calendar.getTaken(datum);
-            ArrayAdapter adapter = new ArrayAdapter<String>(this, Resource.Layout.Main, taken);
-            ListView taskList = FindViewById<ListView>(Resource.Id.listView1);
-            taskList.Adapter = adapter;
-           
-
-        }   
     }
 }
+
+
+
+
+
+
 

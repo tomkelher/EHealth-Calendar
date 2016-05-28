@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Titel"
+                android:id="@+id/textView1" />
+            <EditText
+                android:id="@+id/edittextTitel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Vul uw titel in..."
+                android:padding="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Omschrijving"
+                android:id="@+id/textView2" />
+            <EditText
+                android:id="@+id/edittextOmschrijving"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Geef een omschrijving..."
+                android:padding="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Plaats"
+                android:id="@+id/textView3" />
+            <EditText
+                android:id="@+id/edittextPlaats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Geef een plaats in..."
+                android:padding="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Beginuur"
+                android:id="@+id/textView4" />
+            <TimePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timePickerBegin" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Einduur"
+                android:id="@+id/textView5" />
+            <TimePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timePickerEind" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
