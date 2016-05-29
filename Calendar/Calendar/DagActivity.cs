@@ -18,26 +18,124 @@ namespace Calendar
     [Activity(Label = "Dag")]
     public class DagActivity : Activity
     {
-        
+
         DatabaseConnectionSync database = new DatabaseConnectionSync();
         static DataHolder data = new DataHolder();
         private ListView myListView;
         private DateTime geselecteerdeDatum;
         private TextView myTextView;
-        private string maand;
-        private List<string> myItems;       
+        private List<string> myItems;
         private DateTime datum;
         Calendar.CalendarFunctions calendar = new Calendar.CalendarFunctions();
-    
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             datum = data.getDatum();
-            if (datum.Year < 0010)
+            /* if (datum.Year < 0010)
+             {
+                 datum = DateTime.Now;
+             }*/
+
+
+            SetContentView(Resource.Layout.Dag);
+            myListView = FindViewById<ListView>(Resource.Id.myListView);
+            myTextView = FindViewById<TextView>(Resource.Id.myTextView);
+            myTextView.Text = DateToString(datum);
+            Button buttonAddTask = FindViewById<Button>(Resource.Id.buttonTitelTask);
+            Button buttonPreviousDay = FindViewById<Button>(Resource.Id.buttonPreviousDay);
+            Button buttonNextDay = FindViewById<Button>(Resource.Id.buttonNextDay);
+
+            buttonAddTask.Click += ButtonTaskOnClick;
+
+            buttonPreviousDay.Click += ButtonPreviousOnClick;
+            buttonNextDay.Click += ButtonNextOnClick;
+         
+
+
+            myItems = new List<string>();
+            myItems.Add("00:00");
+            myItems.Add("01:00");
+            myItems.Add("02:00");
+            myItems.Add("03:00");
+            myItems.Add("04:00");
+            myItems.Add("05:00");
+            myItems.Add("06:00");
+            myItems.Add("07:00");
+            myItems.Add("08:00");
+            myItems.Add("09:00");
+            myItems.Add("10:00");
+            myItems.Add("11:00");
+            myItems.Add("12:00");
+            myItems.Add("13:00");
+            myItems.Add("14:00");
+            myItems.Add("15:00");
+            myItems.Add("16:00");
+            myItems.Add("17:00");
+            myItems.Add("18:00");
+            myItems.Add("19:00");
+            myItems.Add("20:00");
+            myItems.Add("21:00");
+            myItems.Add("22:00");
+            myItems.Add("23:00");
+            myItems.Add("00:00");
+
+
+            // inladen van taken die reeds in de lijst stonden
+            int i = 0;
+            List<string> taken = database.getFromTable(datum);
+            foreach (string item in taken)
             {
-                datum = DateTime.Now;
+                int index = Convert.ToInt32(database.getBeginuren(i).Hours);
+                myItems[index] = item;
+                i++;
             }
 
+          
+
+            ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
+            myListView.Adapter = adapter;
+
+
+
+        }
+        private void ButtonNextOnClick(object sender, System.EventArgs e)
+        {
+                datum=datum.AddDays(1);
+                myTextView.Text = DateToString(datum);
+                int i = 0;
+                myItems = ResetAndFillUpList(myItems);
+                List<string> taken = database.getFromTable(datum);
+                foreach (string item in taken)
+                {
+                    int index = Convert.ToInt32(database.getBeginuren(i).Hours);
+                    myItems[index] = item;
+                    i++;
+                }
+            ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
+            myListView.Adapter = adapter;
+
+        }
+        private void ButtonPreviousOnClick(object sender, System.EventArgs e)
+        {
+            datum = datum.AddDays(-1);
+            myTextView.Text = DateToString(datum);
+            int i = 0;
+            myItems = ResetAndFillUpList(myItems);
+            List<string> taken = database.getFromTable(datum);
+            foreach (string item in taken)
+            {
+                int index = Convert.ToInt32(database.getBeginuren(i).Hours);
+                myItems[index] = item;
+                i++;
+            }
+            ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
+            myListView.Adapter = adapter;
+
+        }
+        private string DateToString(DateTime datum)
+        {
+            string maand="";
             switch (datum.Month)
             {
                 case 1:
@@ -77,57 +175,42 @@ namespace Calendar
                     maand = "December";
                     break;
             }
-            SetContentView(Resource.Layout.Dag);
-            myListView = FindViewById<ListView>(Resource.Id.myListView);
-            myTextView = FindViewById<TextView>(Resource.Id.myTextView);
-            myTextView.Text = datum.Day.ToString() +" "+ maand +" "+ datum.Year.ToString();
-            Button buttonAddTask = FindViewById<Button>(Resource.Id.buttonTitelTask);
-
-            buttonAddTask.Click += ButtonTaskOnClick;
+            string returnString = datum.Day.ToString() + " " + maand + " " + datum.Year.ToString();
+            return returnString;
 
 
-            myItems = new List<string>();
-            myItems.Add("00:00");
-            myItems.Add("01:00");
-            myItems.Add("02:00");
-            myItems.Add("03:00");
-            myItems.Add("04:00");
-            myItems.Add("05:00");
-            myItems.Add("06:00");
-            myItems.Add("07:00");
-            myItems.Add("08:00");
-            myItems.Add("09:00");
-            myItems.Add("10:00");
-            myItems.Add("11:00");
-            myItems.Add("12:00");
-            myItems.Add("13:00");
-            myItems.Add("14:00");
-            myItems.Add("15:00");
-            myItems.Add("16:00");
-            myItems.Add("17:00");
-            myItems.Add("18:00");
-            myItems.Add("19:00");
-            myItems.Add("20:00");
-            myItems.Add("21:00");
-            myItems.Add("22:00");
-            myItems.Add("23:00");
-            myItems.Add("00:00");           
-            
+        }
 
-            // inladen van taken die reeds in de lijst stonden
-            int i = 0;
-        /*    foreach (string item in calendar.takenKort)
-            {
-                string taak = " " + calendar.getTitels(geselecteerdeDatum, i) + " " + calendar.getOmschrijvingen(geselecteerdeDatum, i) + " " + calendar.getPlaatsen(geselecteerdeDatum, i) + " " + "van: " + calendar.getBeginuren(geselecteerdeDatum, i) + " " + "tot: " + calendar.getEinduren(geselecteerdeDatum, i);
-                myItems[Convert.ToInt32(calendar.getBeginuren(geselecteerdeDatum, i))] = myItems[Convert.ToInt32(calendar.getBeginuren(geselecteerdeDatum, i))] + taak;
-                i++;
-            }
-            */
-            // lijst myItems doorsturen naar adapter van listview
-            ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
-            myListView.Adapter = adapter;
+        public List<string> ResetAndFillUpList(List<string> lijst)
+        {
+            lijst.Clear();
+            lijst.Add("00:00");
+            lijst.Add("01:00");
+            lijst.Add("02:00");
+            lijst.Add("03:00");
+            lijst.Add("04:00");
+            lijst.Add("05:00");
+            lijst.Add("06:00");
+            lijst.Add("07:00");
+            lijst.Add("08:00");
+            lijst.Add("09:00");
+            lijst.Add("10:00");
+            lijst.Add("11:00");
+            lijst.Add("12:00");
+            lijst.Add("13:00");
+            lijst.Add("14:00");
+            lijst.Add("15:00");
+            lijst.Add("16:00");
+            lijst.Add("17:00");
+            lijst.Add("18:00");
+            lijst.Add("19:00");
+            lijst.Add("20:00");
+            lijst.Add("21:00");
+            lijst.Add("22:00");
+            lijst.Add("23:00");
+            lijst.Add("00:00");
+            return lijst;
 
-            
 
         }
 

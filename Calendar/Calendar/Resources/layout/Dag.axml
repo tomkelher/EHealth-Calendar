@@ -6,11 +6,41 @@
     <include
         android:id="@+id/includeTask"
         layout="@layout/Titlelayout" />
-    <TextView
-        android:id="@+id/myTextView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0.0dp" />
+    <RelativeLayout
+        style="@style/CustomTitleStyle"
+        android:weightSum="3">
+        <Button
+            android:text="&lt;"
+            android:layout_width="30dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/buttonAddTaskLayout"
+            android:textSize="30sp"
+            android:id="@+id/buttonPreviousDay"
+            android:textColor="#ffffff"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1" />
+        <TextView
+            android:id="@+id/myTextView"
+            android:layout_width="wrap_content"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="0.0dp"
+            android:layout_weight="1" />
+        <Button
+            android:text="&gt;"
+            android:layout_width="30dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/buttonAddTaskLayout"
+            android:textSize="30sp"
+            android:textColor="#ffffff"
+            android:layout_alignParentRight="true"
+            android:id="@+id/buttonNextDay"
+            android:layout_centerVertical="true"
+            android:layout_weight="1" />
+    </RelativeLayout>
     <ListView
         android:id="@+id/myListView"
         android:layout_width="fill_parent"
