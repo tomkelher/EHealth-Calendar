@@ -23,6 +23,7 @@ namespace Calendar
         static DataHolder data = new DataHolder();
         private ListView myListView;
         private DateTime geselecteerdeDatum;
+        List<string> taken = new List<string>();
         private TextView myTextView;
         private List<string> myItems;
         private DateTime datum;
@@ -45,12 +46,18 @@ namespace Calendar
             Button buttonAddTask = FindViewById<Button>(Resource.Id.buttonTitelTask);
             Button buttonPreviousDay = FindViewById<Button>(Resource.Id.buttonPreviousDay);
             Button buttonNextDay = FindViewById<Button>(Resource.Id.buttonNextDay);
+            Button moveToToday = FindViewById<Button>(Resource.Id.buttonToday);
 
             buttonAddTask.Click += ButtonTaskOnClick;
 
             buttonPreviousDay.Click += ButtonPreviousOnClick;
             buttonNextDay.Click += ButtonNextOnClick;
-         
+            moveToToday.Click += ButtonTodayOnClick;
+
+            myListView.ItemClick += ListTaskOnClick;
+            myListView.ItemLongClick += ListTaskOnLongClick;
+
+
 
 
             myItems = new List<string>();
@@ -83,29 +90,56 @@ namespace Calendar
 
             // inladen van taken die reeds in de lijst stonden
             int i = 0;
-            List<string> taken = database.getFromTable(datum);
+            taken = database.getFromTable(datum);
             foreach (string item in taken)
             {
                 int index = Convert.ToInt32(database.getBeginuren(i).Hours);
                 myItems[index] = item;
                 i++;
-            }
-
-          
+            }         
 
             ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
             myListView.Adapter = adapter;
 
-
-
         }
+
+        private void ButtonTodayOnClick(object sender, System.EventArgs args)
+        {
+            ChangeDate();
+        }
+                
+        private void ChangeDate()
+        {
+            DateTime mindate = new DateTime(1970, 1, 1, 0, 0, 0);
+            long date = (DateTime.Today.Ticks / 10000) - (mindate.Ticks / 10000) + 2 * 3600 * 1000;            
+            DateTime setDate = DateTime.Now;
+            try { datum = new DateTime(setDate.Year, setDate.Month, setDate.Day); }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e);
+            }            
+            System.Diagnostics.Debug.WriteLine(datum);
+            myTextView.Text = DateToString(datum);
+            int i = 0;
+            taken = database.getFromTable(datum);
+            foreach (string item in taken)
+            {
+                int index = Convert.ToInt32(database.getBeginuren(i).Hours);
+                myItems[index] =  item;
+                i++;
+            }
+            ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
+            myListView.Adapter = adapter;
+        }
+
+
         private void ButtonNextOnClick(object sender, System.EventArgs e)
         {
                 datum=datum.AddDays(1);
                 myTextView.Text = DateToString(datum);
                 int i = 0;
                 myItems = ResetAndFillUpList(myItems);
-                List<string> taken = database.getFromTable(datum);
+                taken = database.getFromTable(datum);
                 foreach (string item in taken)
                 {
                     int index = Convert.ToInt32(database.getBeginuren(i).Hours);
@@ -122,7 +156,7 @@ namespace Calendar
             myTextView.Text = DateToString(datum);
             int i = 0;
             myItems = ResetAndFillUpList(myItems);
-            List<string> taken = database.getFromTable(datum);
+            taken = database.getFromTable(datum);
             foreach (string item in taken)
             {
                 int index = Convert.ToInt32(database.getBeginuren(i).Hours);
@@ -243,15 +277,20 @@ namespace Calendar
                 minutenEinde = Convert.ToInt32(einde.CurrentMinute);
                 beginuur = new TimeSpan(uurBegin, minutenBegin, 0);
                 einduur = new TimeSpan(uurEinde, minutenEinde, 0);
-               // calendar.addTaak(titel.Text, omschrijving.Text, plaats.Text, beginuur, einduur);
-                
-                                     
-                string taak = " " + titel.Text + " " + omschrijving.Text + " " + plaats.Text + " " + "van: " + beginuur + " " + "tot: " + einduur;
-                myItems[uurBegin] = myItems[uurBegin] + taak;
-                    
-                
-                               
+                // calendar.addTaak(titel.Text, omschrijving.Text, plaats.Text, beginuur, einduur);           
 
+                /* string taak = " " + titel.Text + " " + omschrijving.Text + " " + plaats.Text + " " + "van: " + beginuur + " " + "tot: " + einduur;
+                 myItems[uurBegin] = myItems[uurBegin] + taak;*/
+                database.addToTable(datum, titel.Text, plaats.Text, omschrijving.Text, beginuur, einduur);
+                myItems = ResetAndFillUpList(myItems);
+                taken = database.getFromTable(datum);
+                int i = 0;
+                foreach (string item in taken)
+                {
+                    int index = Convert.ToInt32(database.getBeginuren(i).Hours);
+                    myItems[index] = item;
+                    i++;
+                }
                 ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
                 myListView.Adapter = adapter;
 
@@ -275,6 +314,173 @@ namespace Calendar
                 else alert.GetButton((int)DialogButtonType.Positive).Enabled = true;
             };
 
+
+        }
+
+        private void ListTaskOnClick(object sender, AdapterView.ItemClickEventArgs arg)
+        {
+
+            LayoutInflater layoutInflater = LayoutInflater.From(this);
+            View promptView = layoutInflater.Inflate(Resource.Layout.listShowAllLayout, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.SetView(promptView);
+            alertDialogBuilder.SetTitle("Omschrijving van de taak");
+
+            EditText toonTitel = (EditText)promptView.FindViewById<EditText>(Resource.Id.edittextShowTitel);
+            EditText toonOmschrijving = (EditText)promptView.FindViewById<EditText>(Resource.Id.edittextShowOmschrijving);
+            EditText toonPlaats = (EditText)promptView.FindViewById<EditText>(Resource.Id.edittextShowPlaats);
+            TimePicker toonBegin = (TimePicker)promptView.FindViewById<TimePicker>(Resource.Id.timePickerShowBegin);
+            TimePicker toonEinde = (TimePicker)promptView.FindViewById<TimePicker>(Resource.Id.timePickerShowEind);
+            toonBegin.SetIs24HourView(Java.Lang.Boolean.True);
+            toonEinde.SetIs24HourView(Java.Lang.Boolean.True);
+            String zoeken = myItems[arg.Position];
+            int positie=0;
+            foreach (string item in taken)
+            {
+                if (item == zoeken) break;
+                positie++;
+
+            }
+            TimeSpan beginuren = database.getBeginuren(positie);
+            TimeSpan einduren = database.getEinduren(positie);
+            toonTitel.Text = database.getTitels(positie);
+            toonOmschrijving.Text = database.getOmschrijvingen(positie);
+            toonPlaats.Text = database.getPlaatsen(positie);
+
+            toonBegin.Enabled = false;
+            toonEinde.Enabled = false;
+            System.Diagnostics.Debug.Write(datum);
+            toonBegin.CurrentHour = (Java.Lang.Integer)(beginuren.Hours);
+            toonBegin.CurrentMinute = (Java.Lang.Integer)(beginuren.Minutes);
+
+            toonEinde.CurrentHour = (Java.Lang.Integer)(einduren.Hours);
+            toonEinde.CurrentMinute = (Java.Lang.Integer)(einduren.Minutes);
+
+
+            alertDialogBuilder.SetPositiveButton("OK", (senderAlert, args) =>
+            {
+
+            });
+
+            alertDialogBuilder.SetNegativeButton("Bewerk", (senderAlert, args) =>
+            {
+
+                EditTask(positie, toonTitel.Text, toonOmschrijving.Text, toonPlaats.Text, beginuren, einduren);
+
+            });
+
+            AlertDialog alert = alertDialogBuilder.Create();
+            alert.Show();
+
+        }
+        private void ListTaskOnLongClick(object sender, AdapterView.ItemLongClickEventArgs arg)
+        {
+
+            LayoutInflater layoutInflater = LayoutInflater.From(this);
+            View promptView = layoutInflater.Inflate(Resource.Layout.TaskMenu, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.SetView(promptView);
+            alertDialogBuilder.SetTitle("Menu");
+            int positie = 0;
+            String zoeken = myItems[arg.Position];
+            foreach (string test in taken)
+            {
+                if (test == zoeken) break;
+                positie++;
+
+            }
+            int item = database.getId(positie);
+            Button verwijder = (Button)promptView.FindViewById<Button>(Resource.Id.buttonMenuDel);
+            Button annuleer = (Button)promptView.FindViewById<Button>(Resource.Id.buttonMenuCancel);
+            AlertDialog alert = alertDialogBuilder.Create();
+            verwijder.Click += (object senderVerw, System.EventArgs verw) =>
+            {
+                database.DeleteFromTable(item);
+                alert.Cancel();
+                myItems = ResetAndFillUpList(myItems);
+                taken = database.getFromTable(datum);
+                int i = 0;
+                foreach (string test in taken)
+                {
+                    int indextest = Convert.ToInt32(database.getBeginuren(i).Hours);
+                    myItems[indextest] = test;
+                    i++;
+                }
+                ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
+                myListView.Adapter = adapter;
+            };
+
+            annuleer.Click += (object senderVerw, System.EventArgs verw) =>
+            {
+                alert.Cancel();
+            };
+            alert.Show();
+
+
+        }
+        private void EditTask(int index, String titel, String omschrijving, String plaats, TimeSpan beginUur, TimeSpan eindUur)
+        {
+            int item = database.getId(index);
+            LayoutInflater layoutInflater = LayoutInflater.From(this);
+            View promptView = layoutInflater.Inflate(Resource.Layout.taakLayout, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.SetView(promptView);
+            alertDialogBuilder.SetTitle("Wijzigen van de taak");
+
+            EditText toonTitel = (EditText)promptView.FindViewById(Resource.Id.edittextTitel);
+            EditText toonOmschrijving = (EditText)promptView.FindViewById(Resource.Id.edittextOmschrijving);
+            EditText toonPlaats = (EditText)promptView.FindViewById(Resource.Id.edittextPlaats);
+
+            TimePicker toonBegin = (TimePicker)promptView.FindViewById(Resource.Id.timePickerBegin);
+            toonBegin.SetIs24HourView(Java.Lang.Boolean.True);
+            TimePicker toonEinde = (TimePicker)promptView.FindViewById(Resource.Id.timePickerEind);
+            toonEinde.SetIs24HourView(Java.Lang.Boolean.True);
+
+            toonTitel.Text = titel;
+            toonOmschrijving.Text = omschrijving;
+            toonPlaats.Text = plaats;
+
+            toonBegin.CurrentHour = (Java.Lang.Integer)(beginUur.Hours);
+            toonBegin.CurrentMinute = (Java.Lang.Integer)(beginUur.Minutes);
+
+            toonEinde.CurrentHour = (Java.Lang.Integer)(eindUur.Hours);
+            toonEinde.CurrentMinute = (Java.Lang.Integer)(eindUur.Minutes);
+
+
+            alertDialogBuilder.SetPositiveButton("Opslaan", (senderAlert, args) =>
+            {
+                toonBegin.ClearFocus();
+                toonEinde.ClearFocus();
+                TimeSpan beginuur = new TimeSpan(Convert.ToInt32(toonBegin.CurrentHour), Convert.ToInt32(toonBegin.CurrentMinute), 0);
+                TimeSpan einduur = new TimeSpan(Convert.ToInt32(toonEinde.CurrentHour), Convert.ToInt32(toonEinde.CurrentMinute), 0);
+                database.ChangeToTable(item, datum, toonTitel.Text, toonPlaats.Text, toonOmschrijving.Text, beginuur, einduur);
+                myItems = ResetAndFillUpList(myItems);
+                taken = database.getFromTable(datum);
+                int i = 0;
+                foreach (string test in taken)
+                {
+                    int indextest = Convert.ToInt32(database.getBeginuren(i).Hours);
+                    myItems[indextest] = test;
+                    i++;
+                }
+                ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
+                myListView.Adapter = adapter;
+
+
+            });
+
+            alertDialogBuilder.SetNegativeButton("Annuleren", (senderAlert, args) =>
+            {
+
+            });
+
+            AlertDialog alert = alertDialogBuilder.Create();
+            alert.Show();
+            toonTitel.TextChanged += (object sendere, Android.Text.TextChangedEventArgs tekst) =>
+            {
+                if (tekst.Text.ToString() == "") alert.GetButton((int)DialogButtonType.Positive).Enabled = false;
+                else alert.GetButton((int)DialogButtonType.Positive).Enabled = true;
+            };
 
         }
     }
