@@ -130,6 +130,7 @@ namespace Calendar
             }
             ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
             myListView.Adapter = adapter;
+            data.setDatum(datum);
         }
 
 
@@ -148,6 +149,7 @@ namespace Calendar
                 }
             ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
             myListView.Adapter = adapter;
+            data.setDatum(datum);
 
         }
         private void ButtonPreviousOnClick(object sender, System.EventArgs e)
@@ -165,6 +167,7 @@ namespace Calendar
             }
             ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, myItems);
             myListView.Adapter = adapter;
+            data.setDatum(datum);
 
         }
         private string DateToString(DateTime datum)

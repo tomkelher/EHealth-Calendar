@@ -24,7 +24,13 @@ namespace Calendar
             base.OnCreate(bundle);
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Maand);
-           
+            datum = data.getDatum();
+             if (datum.Year < 0010)
+             {
+                 datum = DateTime.Now;
+             }
+            ChangeDate(datum);
+
 
             // Get our CalenderView from the layout resource,
             // and attach an event to it
@@ -40,12 +46,10 @@ namespace Calendar
             taskList.ItemClick += ListTaskOnClick;
             taskList.ItemLongClick += ListTaskOnLongClick;
             moveToToday.Click += ButtonTodayOnClick;
-            ChangeDate();
-
         }
         private void ButtonTodayOnClick(object sender, System.EventArgs args)
         {
-            ChangeDate();
+            ChangeDate(DateTime.Today);
         }
 
         /**
@@ -56,22 +60,18 @@ namespace Calendar
          * 2*3600*1000 uur, seconden, miliseconden. België = UTC +2.
          * Op de huidige datum zit een onnauwkeurigheid van 13 minuten, geen idee waarom
          */
-        private void ChangeDate()
+        private void ChangeDate(DateTime datumChange)
         {
             CalendarView calendar = FindViewById<CalendarView>(Resource.Id.calendarView1);
             ListView taskList = FindViewById<ListView>(Resource.Id.listView1);
             DateTime mindate = new DateTime(1970,1,1,0,0,0);
-            long date = (DateTime.Today.Ticks/10000)-(mindate.Ticks/10000)+ 2*3600*1000;
+           // long date = (DateTime.Today.Ticks / 10000) - (mindate.Ticks / 10000) + 2 * 3600 * 1000;
+            long date = (datumChange.Ticks/10000)-(mindate.Ticks/10000)+ 2*3600*1000;
             calendar.Date = date;
             DateTime setDate = DateTime.Now;
-            try { datum = new DateTime(setDate.Year, setDate.Month, setDate.Day); }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e);
-            }
-            data.setDatum(datum);
-            System.Diagnostics.Debug.WriteLine(datum);
-            List<string> taken = database.getFromTable(datum);
+            
+            data.setDatum(datumChange);
+            List<string> taken = database.getFromTable(datumChange);
             ArrayAdapter adapter = new ArrayAdapter<String>(this, Resource.Layout.TextViewItem, taken);
             taskList.Adapter = adapter;
         }
