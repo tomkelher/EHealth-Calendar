@@ -15,7 +15,7 @@ namespace Calendar
     [Activity(Label = "Maand")]
     public class MonthActivity : Activity
     {
-       // DataHolder dataholder = new DataHolder();
+
         DatabaseConnectionSync database = new DatabaseConnectionSync();
         static DateTime datum;
         static DataHolder data = new DataHolder();
@@ -29,7 +29,7 @@ namespace Calendar
              {
                  datum = DateTime.Now;
              }
-            ChangeDate(datum);
+              ChangeDate(datum);
 
 
             // Get our CalenderView from the layout resource,
@@ -49,7 +49,7 @@ namespace Calendar
         }
         private void ButtonTodayOnClick(object sender, System.EventArgs args)
         {
-            ChangeDate(DateTime.Today);
+            ChangeDate(DateTime.Now);
         }
 
         /**
@@ -67,9 +67,9 @@ namespace Calendar
             DateTime mindate = new DateTime(1970,1,1,0,0,0);
            // long date = (DateTime.Today.Ticks / 10000) - (mindate.Ticks / 10000) + 2 * 3600 * 1000;
             long date = (datumChange.Ticks/10000)-(mindate.Ticks/10000)+ 2*3600*1000;
-            calendar.Date = date;
-            DateTime setDate = DateTime.Now;
-            
+           
+           calendar.Date = date;
+                 
             data.setDatum(datumChange);
             List<string> taken = database.getFromTable(datumChange);
             ArrayAdapter adapter = new ArrayAdapter<String>(this, Resource.Layout.TextViewItem, taken);
@@ -137,7 +137,9 @@ namespace Calendar
 
         private void CalendarOnDateChange(object sender, CalendarView.DateChangeEventArgs args)
         {
-            
+ 
+
+
             ListView taskList = FindViewById<ListView>(Resource.Id.listView1);
             DateTime dataset = new DateTime(args.Year, args.Month+1, args.DayOfMonth);
             try { datum = dataset; }
