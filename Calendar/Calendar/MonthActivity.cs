@@ -67,8 +67,9 @@ namespace Calendar
             DateTime mindate = new DateTime(1970,1,1,0,0,0);
            // long date = (DateTime.Today.Ticks / 10000) - (mindate.Ticks / 10000) + 2 * 3600 * 1000;
             long date = (datumChange.Ticks/10000)-(mindate.Ticks/10000)+ 2*3600*1000;
-           
-           calendar.Date = date;
+            System.Diagnostics.Debug.WriteLine("onacc:" + date);
+            System.Diagnostics.Debug.WriteLine("acc:"+calendar.Date);
+            calendar.Date = date;
                  
             data.setDatum(datumChange);
             List<string> taken = database.getFromTable(datumChange);

@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:id="@+id/linearLayout1">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/linearLayoutMenuTask">
     <Button
         android:text="Verwijder taak"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40sp"
         android:textSize="20sp"
+        android:layout_centerHorizontal="true"
         android:textColor="#ffffff"
         android:background="@drawable/buttonAddTaskLayout"
         android:id="@+id/buttonMenuDel" />
     <Button
         android:text="Annuleer"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40sp"
+        android:layout_below="@+id/buttonMenuDel"
         android:textSize="20sp"
         android:textColor="#ffffff"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/buttonAddTaskLayout"
         android:id="@+id/buttonMenuCancel" />
-</LinearLayout>
+</RelativeLayout>

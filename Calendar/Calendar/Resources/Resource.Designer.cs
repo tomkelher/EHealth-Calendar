@@ -126,7 +126,7 @@ namespace Calendar
 			public const int includeTask = 2131099648;
 			
 			// aapt resource value: 0x7f06001c
-			public const int linearLayout1 = 2131099676;
+			public const int linearLayoutMenuTask = 2131099676;
 			
 			// aapt resource value: 0x7f060011
 			public const int listView1 = 2131099665;

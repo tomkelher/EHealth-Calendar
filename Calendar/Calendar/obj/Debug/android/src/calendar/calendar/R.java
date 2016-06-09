@@ -35,7 +35,7 @@ public final class R {
         public static final int edittextTitel=0x7f060013;
         public static final int include=0x7f06000f;
         public static final int includeTask=0x7f060000;
-        public static final int linearLayout1=0x7f06001c;
+        public static final int linearLayoutMenuTask=0x7f06001c;
         public static final int listView1=0x7f060011;
         public static final int myListView=0x7f060004;
         public static final int myTextView=0x7f060002;
